@@ -15,6 +15,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String [] args){
+        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         //generateGraph();
         importGraph();
     }
@@ -22,15 +23,16 @@ public class Main {
     private static void importGraph(){
         String rootPath = System.getProperty("user.dir");
         String inputGSFile = rootPath + "/gsGraph.dgs";
-        String inputSPLACommunitiesFile = rootPath + "/../../../../math/GANXiS_v3.0.2/output/SLPAw_splaGraph_run1_r0.01_v3_T100.icpm.node-com.txt";
+        String inputSPLACommunitiesFile = rootPath + "/../../../../math/GANXiS_v3.0.2/output/SLPAw_splaGraph_run1_r0.35_v3_minC5_T100.icpm.node-com.txt";
 
         try {
             ImportGSGraph importGSGraph = new ImportGSGraph(inputGSFile);
             ImportSPLACommunities importSPLACommunities = new ImportSPLACommunities((inputSPLACommunitiesFile));
 
             Graph graph = importGSGraph.importGraph("DorogovtsevMendes");
+            String cssPath = rootPath + "/src/main/resources/css/stylesheet.css";
+            graph.addAttribute("ui.stylesheet", "url('file://" + cssPath +  "')");
             Viewer viewer =  graph.display(false);
-
             importSPLACommunities.importCommunities(graph, viewer);
 
         } catch (IOException e) {

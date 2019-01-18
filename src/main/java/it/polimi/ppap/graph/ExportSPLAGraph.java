@@ -29,7 +29,7 @@ public class ExportSPLAGraph {
                 Edge edge = it.next();
                 writeToFile(edge.getNode0().getId() + "\t");
                 writeToFile(edge.getNode1().getId() + "\t");
-                writeToFile(Math.max(1, r.nextInt()) + "\n");
+                writeToFile(Math.min(1, r.nextInt(50)) + "\n");
             }
             closeFile();
         } catch (IOException e) {

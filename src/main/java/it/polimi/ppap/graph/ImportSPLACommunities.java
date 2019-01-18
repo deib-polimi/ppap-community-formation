@@ -29,15 +29,25 @@ public class ImportSPLACommunities {
             String [] terms = line.split(" ");
             String nodeId = terms[0];
             String communityId = terms[1];
-            System.out.println(nodeId + "\t" + communityId);
             Node node = graph.getNode(nodeId);
             if(!communityColor.containsKey(communityId))
                 communityColor.put(communityId, RandomColorPicker.pickRandomColor());
             String rgb = getColorRGB(communityColor.get(communityId));
-            node.addAttribute("ui.style", "fill-color: " + rgb + ";");
+            if(node.getAttribute("membership") != null) {
+                String sharedRgb = getColorRGB(communityColor.get(node.getAttribute("membership")));
+                node.addAttribute("ui.class", "shared");
+                node.addAttribute("ui.pie-values", new Float[]{0.5f, 0.5f});
+                node.addAttribute("ui.style", "fill-color: " + rgb + ", " + sharedRgb + ";");
+                node.addAttribute("membership", communityId);
+            }else{
+                node.addAttribute("ui.style", "fill-color: " + rgb + ";");
+            }
+            node.addAttribute("membership", communityId);
         }
         closeFile();
     }
+
+
 
     private String getColorRGB(Color color){
         return "rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")";
